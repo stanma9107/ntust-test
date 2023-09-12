@@ -3,7 +3,7 @@ name: Summary Student Score
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   summary-score:
