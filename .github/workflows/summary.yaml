@@ -1,0 +1,45 @@
+name: Summary Student Score
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  summary-score:
+    runs-on: ubuntu-latest
+    steps:
+    - id: checkout
+      name: Checkout code
+      uses: actions/checkout@v3
+
+    - id: setup-python
+      name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+    
+    - id: install-dependencies
+      name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - id: run-script
+      name: Run summary script
+      run: python build.py
+      shell: bash
+
+    - id: commit-file
+      name: Commit file
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add README.md
+        git commit -m "Docs: Update Score Summary"
+
+    - id: push-commit
+      name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
